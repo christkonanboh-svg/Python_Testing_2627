@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 # pyrefly: ignore[missing-import]
 from flask import Flask,render_template,request,redirect,flash,url_for
@@ -17,7 +18,7 @@ def loadCompetitions():
 
 
 app = Flask(__name__)
-app.secret_key = 'something_special'
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 competitions = loadCompetitions()
 clubs = loadClubs()
