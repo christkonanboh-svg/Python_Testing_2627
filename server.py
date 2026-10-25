@@ -55,7 +55,11 @@ def purchasePlaces():
         return redirect(url_for('index'))
     competition = matched_competitions[0]
     club = matched_clubs[0]
-    placesRequired = int(request.form['places'])
+    try:
+        placesRequired = int(request.form['places'])
+    except ValueError:
+        flash("Please enter a valid number of places.")
+        return render_template('booking.html', club=club, competition=competition)
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
