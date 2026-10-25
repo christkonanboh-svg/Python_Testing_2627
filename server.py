@@ -1,4 +1,5 @@
 import json
+# pyrefly: ignore[missing-import]
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
@@ -66,6 +67,14 @@ def purchasePlaces():
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
+
+
+# TODO: Add route for points display
+
+
+@app.route('/logout')
+def logout():
+    return redirect(url_for('index'))itions)
 
 
 # TODO: Add route for points display
