@@ -2,35 +2,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary | GUDLFT Registration</title>
+    <title>Tableau de bord | GUDLFT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            padding: 2rem;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto 2.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-info { display: flex; align-items: center; gap: 1.2rem; }
+
+        .points-badge {
+            background: linear-gradient(135deg, #a78bfa33, #60a5fa33);
+            border: 1px solid rgba(167,139,250,0.3);
+            border-radius: 50px;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #a78bfa;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1.2rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.7);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+        .main { max-width: 900px; margin: 0 auto; }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .welcome-email {
+            color: #a78bfa;
+            background: none;
+            -webkit-text-fill-color: #a78bfa;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin: 2rem 0 1rem;
+        }
+
+        .flash-messages {
+            background: rgba(167,139,250,0.1);
+            border: 1px solid rgba(167,139,250,0.3);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            list-style: none;
+        }
+
+        .flash-messages li { color: #a78bfa; font-weight: 500; }
+
+        .competitions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .comp-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .comp-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(167,139,250,0.4);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .comp-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(90deg, #fff, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .comp-detail {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 0.4rem;
+        }
+
+        .comp-places {
+            display: inline-block;
+            background: rgba(96,165,250,0.15);
+            border: 1px solid rgba(96,165,250,0.3);
+            border-radius: 8px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.85rem;
+            color: #60a5fa;
+            font-weight: 600;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .book-btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 0.7rem 1.2rem;
+            background: linear-gradient(135deg, #a78bfa, #60a5fa);
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(167,139,250,0.4);
+        }
+
+        .full-badge {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 0.7rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.85rem;
+        }
+    </style>
 </head>
 <body>
-        <h2>Welcome, {{club['email']}} </h2><a href="{{url_for('logout')}}">Logout</a>
+    <div class="navbar">
+        <div class="logo">GUDLFT</div>
+        <div class="user-info">
+            <span class="points-badge">⭐ {{club['points']}} pts</span>
+            <a href="{{url_for('logout')}}" class="logout-btn">Déconnexion</a>
+        </div>
+    </div>
 
-    {% with messages = get_flashed_messages()%}
-    {% if messages %}
-        <ul>
-       {% for message in messages %}
-            <li>{{message}}</li>
-        {% endfor %}
-       </ul>
-    {% endif%}
-    Points available: {{club['points']}}
-    <h3>Competitions:</h3>
-    <ul>
-        {% for comp in competitions%}
-        <li>
-            {{comp['name']}}<br />
-            Date: {{comp['date']}}</br>
-            Number of Places: {{comp['numberOfPlaces']}}
-            {%if comp['numberOfPlaces']|int >0%}
-            <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
-            {%endif%}
-        </li>
-        <hr />
-        {% endfor %}
-    </ul>
-    {%endwith%}
+    <div class="main">
+        <h1 class="welcome-title">Bienvenue, <span class="welcome-email">{{club['email']}}</span></h1>
 
+        {% with messages = get_flashed_messages()%}
+        {% if messages %}
+            <ul class="flash-messages" style="margin-top:1rem;">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <p class="section-title">Compétitions disponibles</p>
+        <div class="competitions-grid">
+            {% for comp in competitions%}
+            <div class="comp-card">
+                <div class="comp-name">{{comp['name']}}</div>
+                <div class="comp-detail">📅 {{comp['date']}}</div>
+                <span class="comp-places">{{comp['numberOfPlaces']}} places</span>
+                <br>
+                {%if comp['numberOfPlaces']|int > 0%}
+                <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}" class="book-btn">Réserver →</a>
+                {%else%}
+                <span class="full-badge">Complet</span>
+                {%endif%}
+            </div>
+            {% endfor %}
+        </div>
+        {%endwith%}
+    </div>
 </body>
-</html>
+</html>
