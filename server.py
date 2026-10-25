@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 # pyrefly: ignore[missing-import]
 from flask import Flask,render_template,request,redirect,flash,url_for
 
@@ -44,6 +45,10 @@ def book(competition,club):
         return redirect(url_for('index'))
     foundClub = matched_clubs[0]
     foundCompetition = matched_competitions[0]
+    competition_date = datetime.strptime(foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
+    if competition_date < datetime.now():
+        flash("This competition has already taken place and cannot be booked.")
+        return redirect(url_for('index'))
     return render_template('booking.html',club=foundClub,competition=foundCompetition)
 
 
