@@ -1,5 +1,4 @@
 import json
-# pyrefly: ignore[missing-import]
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
@@ -37,19 +36,25 @@ def showSummary():
 
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
-    if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
-    else:
+    matched_clubs = [c for c in clubs if c['name'] == club]
+    matched_competitions = [c for c in competitions if c['name'] == competition]
+    if not matched_clubs or not matched_competitions:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return redirect(url_for('index'))
+    foundClub = matched_clubs[0]
+    foundCompetition = matched_competitions[0]
+    return render_template('booking.html',club=foundClub,competition=foundCompetition)
 
 
 @app.route('/purchasePlaces',methods=['POST'])
 def purchasePlaces():
-    competition = [c for c in competitions if c['name'] == request.form['competition']][0]
-    club = [c for c in clubs if c['name'] == request.form['club']][0]
+    matched_competitions = [c for c in competitions if c['name'] == request.form['competition']]
+    matched_clubs = [c for c in clubs if c['name'] == request.form['club']]
+    if not matched_competitions or not matched_clubs:
+        flash("Something went wrong-please try again")
+        return redirect(url_for('index'))
+    competition = matched_competitions[0]
+    club = matched_clubs[0]
     placesRequired = int(request.form['places'])
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     flash('Great-booking complete!')
