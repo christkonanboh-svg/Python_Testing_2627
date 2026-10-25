@@ -72,16 +72,12 @@ def purchasePlaces():
         return render_template('booking.html', club=club, competition=competition)
     competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
     club['points'] = int(club['points'])-placesRequired
+    with open('competitions.json', 'w') as f:
+        json.dump({'competitions': competitions}, f)
+    with open('clubs.json', 'w') as f:
+        json.dump({'clubs': clubs}, f)
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
-
-
-# TODO: Add route for points display
-
-
-@app.route('/logout')
-def logout():
-    return redirect(url_for('index'))itions)
 
 
 # TODO: Add route for points display
