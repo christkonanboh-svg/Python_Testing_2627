@@ -1,226 +1,846 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord | GUDLFT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Tableau de bord — {{ club['name'] }} | GUDLFT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --card-bg: rgba(22, 27, 44, 0.7);
+            --card-hover: rgba(30, 37, 58, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            padding: 2rem;
+            background: radial-gradient(circle at 10% 15%, rgba(139, 92, 246, 0.12) 0%, transparent 45%),
+                        radial-gradient(circle at 90% 85%, rgba(6, 182, 212, 0.1) 0%, transparent 45%),
+                        linear-gradient(135deg, #090d16 0%, #0f172a 100%);
+            color: var(--text-main);
+            padding: 2rem 1.5rem;
         }
 
+        .dashboard-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 900px;
-            margin: 0 auto 2.5rem;
             padding: 1rem 1.5rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
             backdrop-filter: blur(20px);
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #a78bfa, #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .user-info { display: flex; align-items: center; gap: 1.2rem; }
-
-        .points-badge {
-            background: linear-gradient(135deg, #a78bfa33, #60a5fa33);
-            border: 1px solid rgba(167,139,250,0.3);
-            border-radius: 50px;
-            padding: 0.4rem 1rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #a78bfa;
-        }
-
-        .logout-btn {
-            padding: 0.5rem 1.2rem;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 10px;
-            color: rgba(255,255,255,0.7);
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
-
-        .main { max-width: 900px; margin: 0 auto; }
-
-        .welcome-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
-
-        .welcome-email {
-            color: #a78bfa;
-            background: none;
-            -webkit-text-fill-color: #a78bfa;
-        }
-
-        .section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: rgba(255,255,255,0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin: 2rem 0 1rem;
-        }
-
-        .flash-messages {
-            background: rgba(167,139,250,0.1);
-            border: 1px solid rgba(167,139,250,0.3);
+        .nav-logo {
+            width: 42px;
+            height: 42px;
             border-radius: 12px;
-            padding: 1rem 1.2rem;
-            margin-bottom: 1.5rem;
-            list-style: none;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35);
         }
 
-        .flash-messages li { color: #a78bfa; font-weight: 500; }
-
-        .competitions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.2rem;
-        }
-
-        .comp-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 18px;
-            padding: 1.5rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            animation: fadeUp 0.5s ease both;
-        }
-
-        .comp-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(167,139,250,0.4);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .comp-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
+        .nav-title h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
             background: linear-gradient(90deg, #fff, #c4b5fd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .comp-detail {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 0.4rem;
-        }
-
-        .comp-places {
-            display: inline-block;
-            background: rgba(96,165,250,0.15);
-            border: 1px solid rgba(96,165,250,0.3);
-            border-radius: 8px;
-            padding: 0.2rem 0.7rem;
-            font-size: 0.85rem;
-            color: #60a5fa;
+        .nav-title span {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             font-weight: 600;
-            margin: 0.5rem 0 1rem;
         }
 
-        .book-btn {
-            display: inline-block;
-            width: 100%;
-            text-align: center;
-            padding: 0.7rem 1.2rem;
-            background: linear-gradient(135deg, #a78bfa, #60a5fa);
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .points-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 9999px;
+            padding: 0.45rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #c4b5fd;
+        }
+
+        .nav-link-btn {
+            padding: 0.5rem 1rem;
             border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-link-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-btn {
+            background: rgba(244, 63, 94, 0.1);
+            border-color: rgba(244, 63, 94, 0.25);
+            color: #fda4af;
+        }
+
+        .logout-btn:hover {
+            background: rgba(244, 63, 94, 0.2);
+            color: #fff;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .flash-msg {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #6ee7b7;
+            padding: 0.9rem 1.25rem;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero / Welcome Banner */
+        .hero-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .hero-text h2 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.01em;
+        }
+
+        .hero-text p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .club-tag {
+            color: #a78bfa;
+            font-weight: 600;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.4rem;
+            backdrop-filter: blur(15px);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .kpi-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .kpi-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .kpi-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .icon-purple { background: rgba(139, 92, 246, 0.15); color: #c4b5fd; }
+        .icon-cyan { background: rgba(6, 182, 212, 0.15); color: #67e8f9; }
+        .icon-emerald { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        .icon-amber { background: rgba(245, 158, 11, 0.15); color: #fde68a; }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .kpi-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Search and Tabs Filter */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .tabs-list {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 0.3rem;
+            border-radius: 14px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: rgba(139, 92, 246, 0.2);
+            color: #fff;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 260px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.55rem 1rem 0.55rem 2.4rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
             color: #fff;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
+            font-size: 0.88rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.06);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Competitions Cards Grid */
+        .competitions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .comp-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(15px);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
         }
 
-        .book-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(167,139,250,0.4);
+        .comp-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
         }
 
-        .full-badge {
-            display: inline-block;
+        .comp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .category-chip {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #c4b5fd;
+            background: rgba(139, 92, 246, 0.12);
+            padding: 0.25rem 0.65rem;
+            border-radius: 6px;
+        }
+
+        .status-pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .status-open {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+
+        .status-urgent {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fde68a;
+        }
+
+        .status-full {
+            background: rgba(244, 63, 94, 0.15);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            color: #fda4af;
+        }
+
+        .status-past {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+        }
+
+        .comp-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: #fff;
+        }
+
+        .comp-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Bar for Places */
+        .places-progress-wrapper {
+            margin-bottom: 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.8rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .places-stats-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .places-label {
+            color: var(--text-muted);
+        }
+
+        .places-count {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .progress-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.5s ease;
+        }
+
+        .fill-green { background: linear-gradient(90deg, #10b981, #34d399); }
+        .fill-amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .fill-red { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+        .btn-action {
+            display: block;
             width: 100%;
             text-align: center;
-            padding: 0.7rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            color: rgba(255,255,255,0.3);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-book {
+            background: linear-gradient(135deg, var(--accent-purple), #6366f1);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+        }
+
+        .btn-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-disabled {
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: not-allowed;
+        }
+
+        /* Leaderboard preview table */
+        .leaderboard-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            margin-top: 1rem;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .leaderboard-title h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .leaderboard-title p {
             font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            text-align: left;
+            padding: 0.8rem 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .leaderboard-table td {
+            padding: 0.9rem 1rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .leaderboard-table tr.active-club-row {
+            background: rgba(139, 92, 246, 0.12);
+            font-weight: 700;
+        }
+
+        .current-badge {
+            background: var(--accent-purple);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            margin-left: 0.5rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .nav-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">GUDLFT</div>
-        <div class="user-info">
-            <span class="points-badge">⭐ {{club['points']}} pts</span>
-            <a href="{{url_for('logout')}}" class="logout-btn">Déconnexion</a>
-        </div>
-    </div>
-
-    <div class="main">
-        <h1 class="welcome-title">Bienvenue, <span class="welcome-email">{{club['email']}}</span></h1>
-
-        {% with messages = get_flashed_messages()%}
-        {% if messages %}
-            <ul class="flash-messages" style="margin-top:1rem;">
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-
-        <p class="section-title">Compétitions disponibles</p>
-        <div class="competitions-grid">
-            {% for comp in competitions%}
-            <div class="comp-card">
-                <div class="comp-name">{{comp['name']}}</div>
-                <div class="comp-detail">📅 {{comp['date']}}</div>
-                <span class="comp-places">{{comp['numberOfPlaces']}} places</span>
-                <br>
-                {%if comp['numberOfPlaces']|int > 0%}
-                <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}" class="book-btn">Réserver →</a>
-                {%else%}
-                <span class="full-badge">Complet</span>
-                {%endif%}
+    <div class="dashboard-container">
+        <!-- Top Navbar -->
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="nav-logo">⚡</div>
+                <div class="nav-title">
+                    <h1>GUDLFT</h1>
+                    <span>Fédération Nationale de Force</span>
+                </div>
             </div>
+            <div class="nav-right">
+                <div class="points-pill">
+                    <span>⭐</span>
+                    <span>{{ club['points'] }} Points</span>
+                </div>
+                <a href="/pointsDisplay" class="nav-link-btn">Classement 🏆</a>
+                <a href="{{ url_for('logout') }}" class="nav-link-btn logout-btn">Déconnexion</a>
+            </div>
+        </nav>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-messages">
+                {% for message in messages %}
+                    <li class="flash-msg">
+                        <span>✅</span>
+                        <span>{{ message }}</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Welcome Hero -->
+        <div class="hero-banner">
+            <div class="hero-text">
+                <h2>Bonjour, <span class="club-tag">{{ club['name'] }}</span> 👋</h2>
+                <p>Secrétariat officiel connecté avec l'adresse : <span style="color:#fff;">{{ club['email'] }}</span></p>
+            </div>
+        </div>
+
+        <!-- 4 KPI Summary Cards -->
+        {% set active_comps = namespace(count=0) %}
+        {% for c in competitions %}
+            {% if c['date'] > now and c['numberOfPlaces']|int > 0 %}
+                {% set active_comps.count = active_comps.count + 1 %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <span class="kpi-title">Points Disponibles</span>
+                    <div class="kpi-icon icon-purple">🪙</div>
+                </div>
+                <div class="kpi-value">{{ club['points'] }}</div>
+                <div class="kpi-subtitle">Solde actuel pour réservations</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <span class="kpi-title">Compétitions Ouvertes</span>
+                    <div class="kpi-icon icon-emerald">🏆</div>
+                </div>
+                <div class="kpi-value">{{ active_comps.count }}</div>
+                <div class="kpi-subtitle">Événements disponibles</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <span class="kpi-title">Plafond par Réservation</span>
+                    <div class="kpi-icon icon-cyan">🎟️</div>
+                </div>
+                <div class="kpi-value">12 max</div>
+                <div class="kpi-subtitle">Places autorisées par événement</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-card-header">
+                    <span class="kpi-title">Affiliation Fédérale</span>
+                    <div class="kpi-icon icon-amber">🛡️</div>
+                </div>
+                <div class="kpi-value" style="font-size:1.3rem; padding-top:0.35rem;">Certifiée</div>
+                <div class="kpi-subtitle">Saison 2026 - 2027 Active</div>
+            </div>
+        </div>
+
+        <!-- Toolbar: Tabs Filter & Live Search -->
+        <div class="controls-bar">
+            <div class="tabs-list">
+                <button class="tab-btn active" onclick="filterComps('all', this)">Toutes</button>
+                <button class="tab-btn" onclick="filterComps('open', this)">Ouvertes 🟢</button>
+                <button class="tab-btn" onclick="filterComps('urgent', this)">Dernières places 🔥</button>
+                <button class="tab-btn" onclick="filterComps('past', this)">Archivées ⏳</button>
+            </div>
+
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="compSearch" class="search-input" placeholder="Rechercher une compétition ou ville..." onkeyup="searchComps()" />
+            </div>
+        </div>
+
+        <!-- Competitions Grid -->
+        <div class="competitions-grid" id="competitionsGrid">
+            {% for comp in competitions %}
+                {% set places = comp['numberOfPlaces']|int %}
+                {% set total = comp.get('totalPlaces', 30)|int %}
+                {% set is_past = comp['date'] < now %}
+                {% set is_urgent = (not is_past) and places > 0 and places <= 5 %}
+                {% set is_open = (not is_past) and places > 5 %}
+                {% set is_full = (not is_past) and places == 0 %}
+
+                {% if is_past %}
+                    {% set status_type = "past" %}
+                {% elif is_urgent %}
+                    {% set status_type = "urgent" %}
+                {% elif is_open %}
+                    {% set status_type = "open" %}
+                {% else %}
+                    {% set status_type = "full" %}
+                {% endif %}
+
+                {% set percent = (places / total * 100)|round|int if total > 0 else 0 %}
+                {% if percent > 100 %}{% set percent = 100 %}{% endif %}
+
+                <div class="comp-card" data-status="{{ status_type }}" data-title="{{ comp['name']|lower }} {{ comp.get('location', '')|lower }}">
+                    <div>
+                        <div class="comp-header">
+                            <span class="category-chip">{{ comp.get('category', 'Championnat') }}</span>
+                            {% if is_past %}
+                                <span class="status-pill status-past">⏳ Passée</span>
+                            {% elif is_full %}
+                                <span class="status-pill status-full">🔴 Complet</span>
+                            {% elif is_urgent %}
+                                <span class="status-pill status-urgent">🔥 {{ places }} restantes</span>
+                            {% else %}
+                                <span class="status-pill status-open">🟢 Ouvert</span>
+                            {% endif %}
+                        </div>
+
+                        <h3 class="comp-name">{{ comp['name'] }}</h3>
+
+                        <div class="comp-meta">
+                            <div class="meta-row">
+                                <span>📅</span>
+                                <span>{{ comp['date'] }}</span>
+                            </div>
+                            <div class="meta-row">
+                                <span>📍</span>
+                                <span>{{ comp.get('location', 'Site National Fédéral') }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar of Available Places -->
+                        <div class="places-progress-wrapper">
+                            <div class="places-stats-line">
+                                <span class="places-label">Disponibilité</span>
+                                <span class="places-count">{{ places }} / {{ total }} places</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill {% if percent <= 20 %}fill-red{% elif percent <= 50 %}fill-amber{% else %}fill-green{% endif %}" style="width: {{ percent }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        {% if is_past %}
+                            <div class="btn-action btn-disabled">Événement Clôturé</div>
+                        {% elif places == 0 %}
+                            <div class="btn-action btn-disabled">Complet (0 place)</div>
+                        {% else %}
+                            <a href="{{ url_for('book', competition=comp['name'], club=club['name']) }}" class="btn-action btn-book">Réserver des places →</a>
+                        {% endif %}
+                    </div>
+                </div>
             {% endfor %}
         </div>
-        {%endwith%}
+
+        <!-- Leaderboard Table Preview -->
+        <div class="leaderboard-section">
+            <div class="leaderboard-header">
+                <div class="leaderboard-title">
+                    <h3>Classement des Clubs — Saison en cours</h3>
+                    <p>Comparatif des points d'allocation par club pour les compétitions</p>
+                </div>
+                <a href="/pointsDisplay" class="nav-link-btn">Voir tout le classement 🏆</a>
+            </div>
+
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Club</th>
+                        <th>Email de contact</th>
+                        <th>Points disponibles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in clubs %}
+                    <tr class="{% if c['name'] == club['name'] %}active-club-row{% endif %}">
+                        <td>
+                            <span>{{ c['name'] }}</span>
+                            {% if c['name'] == club['name'] %}
+                                <span class="current-badge">Votre club</span>
+                            {% endif %}
+                        </td>
+                        <td style="color:var(--text-muted); font-size:0.85rem;">{{ c['email'] }}</td>
+                        <td>
+                            <span style="font-weight:700; color:#c4b5fd;">⭐ {{ c['points'] }} pts</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <script>
+        let currentFilter = 'all';
+
+        function filterComps(status, button) {
+            currentFilter = status;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            applyFilters();
+        }
+
+        function searchComps() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('compSearch').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.comp-card');
+
+            cards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status');
+                const cardTitle = card.getAttribute('data-title');
+
+                let matchesFilter = false;
+                if (currentFilter === 'all') {
+                    matchesFilter = true;
+                } else if (currentFilter === 'open') {
+                    matchesFilter = (cardStatus === 'open' || cardStatus === 'urgent');
+                } else if (currentFilter === 'urgent') {
+                    matchesFilter = (cardStatus === 'urgent');
+                } else if (currentFilter === 'past') {
+                    matchesFilter = (cardStatus === 'past');
+                }
+
+                const matchesQuery = cardTitle.includes(query);
+
+                if (matchesFilter && matchesQuery) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
-</html>
+</html>

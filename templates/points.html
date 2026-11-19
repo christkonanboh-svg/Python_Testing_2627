@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classement Officiel des Clubs | GUDLFT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --card-bg: rgba(22, 27, 44, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-amber: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 75%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
+                        linear-gradient(135deg, #090d16 0%, #0f172a 100%);
+            color: var(--text-main);
+            padding: 2.5rem 1.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35);
+        }
+
+        .brand-text h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #fff, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .btn-return {
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .btn-return:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(-2px);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .badge-header {
+            display: inline-block;
+            padding: 0.35rem 0.9rem;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 9999px;
+            color: #c4b5fd;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .header-section h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-section p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .podium-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+            align-items: end;
+        }
+
+        .podium-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem 1.25rem;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(15px);
+            transition: transform 0.3s ease;
+        }
+
+        .podium-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .podium-card.first {
+            border-color: rgba(245, 158, 11, 0.5);
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(22, 27, 44, 0.9) 100%);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
+        }
+
+        .podium-rank {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .podium-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .podium-email {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .podium-points {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .first .podium-points {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .table-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            padding: 1.1rem 1.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        td {
+            padding: 1.1rem 1.5rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .rank-cell {
+            font-weight: 700;
+            color: var(--text-muted);
+            width: 70px;
+        }
+
+        .club-name-cell {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .points-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.12);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            color: #c4b5fd;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
+            .podium-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-nav">
+            <a href="/" class="brand">
+                <div class="brand-icon">⚡</div>
+                <div class="brand-text">
+                    <h1>GUDLFT</h1>
+                    <span>League Points Display</span>
+                </div>
+            </a>
+            <a href="javascript:history.back()" class="btn-return">← Retour</a>
+        </div>
+
+        <div class="header-section">
+            <span class="badge-header">Saison 2026 - 2027</span>
+            <h2>Classement Officiel des Clubs</h2>
+            <p>Répertoire public des points disponibles pour les réservations aux compétitions nationales</p>
+        </div>
+
+        {% if clubs|length >= 3 %}
+        <div class="podium-grid">
+            <!-- 2ème place -->
+            <div class="podium-card">
+                <div class="podium-rank">🥈</div>
+                <div class="podium-name">{{ clubs[1]['name'] }}</div>
+                <div class="podium-email">{{ clubs[1]['email'] }}</div>
+                <div class="podium-points">{{ clubs[1]['points'] }} points</div>
+            </div>
+
+            <!-- 1ère place -->
+            <div class="podium-card first">
+                <div class="podium-rank">👑 🥇</div>
+                <div class="podium-name">{{ clubs[0]['name'] }}</div>
+                <div class="podium-email">{{ clubs[0]['email'] }}</div>
+                <div class="podium-points">{{ clubs[0]['points'] }} points</div>
+            </div>
+
+            <!-- 3ème place -->
+            <div class="podium-card">
+                <div class="podium-rank">🥉</div>
+                <div class="podium-name">{{ clubs[2]['name'] }}</div>
+                <div class="podium-email">{{ clubs[2]['email'] }}</div>
+                <div class="podium-points">{{ clubs[2]['points'] }} points</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rang</th>
+                        <th>Club</th>
+                        <th>Email de contact</th>
+                        <th>Solde Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for club in clubs %}
+                    <tr>
+                        <td class="rank-cell">#{{ loop.index }}</td>
+                        <td class="club-name-cell">{{ club['name'] }}</td>
+                        <td style="color: var(--text-muted); font-size: 0.85rem;">{{ club['email'] }}</td>
+                        <td>
+                            <span class="points-badge">⭐ {{ club['points'] }} pts</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

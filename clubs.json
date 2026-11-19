@@ -1,16 +1,39 @@
-{"clubs":[
-    {
-        "name":"Simply Lift",
-        "email":"john@simplylift.co",
-        "points":"13"
-    },
-    {
-        "name":"Iron Temple",
-        "email": "admin@irontemple.com",
-        "points":"4"
-    },
-    {   "name":"She Lifts",
-        "email": "kate@shelifts.co.uk",
-        "points":"12"
-    }
-]}
+{
+    "clubs": [
+        {
+            "name": "Simply Lift",
+            "email": "john@simplylift.co",
+            "points": "15"
+        },
+        {
+            "name": "Iron Temple",
+            "email": "admin@irontemple.com",
+            "points": "8"
+        },
+        {
+            "name": "She Lifts",
+            "email": "kate@shelifts.co.uk",
+            "points": "12"
+        },
+        {
+            "name": "Titan Barbell Club",
+            "email": "contact@titanbarbell.com",
+            "points": "20"
+        },
+        {
+            "name": "Apex Athletics",
+            "email": "info@apexathletics.org",
+            "points": "6"
+        },
+        {
+            "name": "Valkyrie Powerlifting",
+            "email": "team@valkyriepower.co",
+            "points": "18"
+        },
+        {
+            "name": "Olympus Weightlifting",
+            "email": "contact@olympus-lift.fr",
+            "points": "25"
+        }
+    ]
+}

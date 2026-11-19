@@ -1,116 +1,337 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUDLFT Registration</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Connexion Secrétaire | GUDLFT Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --card-bg: rgba(22, 27, 44, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+                        linear-gradient(135deg, #090d16 0%, #0f172a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            color: var(--text-main);
+            padding: 2rem 1.25rem;
         }
 
-        .container {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 24px;
-            padding: 3rem;
+        .auth-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 3rem 2.5rem;
             width: 100%;
-            max-width: 420px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-            animation: fadeIn 0.6s ease;
+            max-width: 480px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(16px); }
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #a78bfa, #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.3rem;
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .subtitle {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.95rem;
-            margin-bottom: 2.5rem;
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+        }
+
+        .brand-titles h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #fff, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-titles p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .flash-box {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 0.9rem 1rem;
+            margin-bottom: 1.5rem;
+            color: #fca5a5;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
         label {
             display: block;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            font-weight: 600;
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
 
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
         input[type="email"] {
             width: 100%;
-            padding: 0.9rem 1.2rem;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 12px;
+            padding: 0.95rem 1.1rem 0.95rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
             color: #fff;
             font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
+            font-size: 0.98rem;
             outline: none;
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
+            transition: all 0.25s ease;
         }
 
         input[type="email"]:focus {
-            border-color: #a78bfa;
-            background: rgba(167,139,250,0.1);
-            box-shadow: 0 0 0 3px rgba(167,139,250,0.2);
+            border-color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.08);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
         }
 
-        input[type="email"]::placeholder { color: rgba(255,255,255,0.3); }
+        input[type="email"]::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
 
-        button[type="submit"] {
+        .submit-btn {
             width: 100%;
             padding: 1rem;
-            background: linear-gradient(135deg, #a78bfa, #60a5fa);
+            background: linear-gradient(135deg, var(--accent-purple) 0%, #6366f1 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: #fff;
             font-family: 'Outfit', sans-serif;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.03em;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
         }
 
-        button[type="submit"]:hover {
+        .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(167,139,250,0.4);
+            box-shadow: 0 12px 30px rgba(139, 92, 246, 0.45);
+        }
+
+        .demo-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .demo-title {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .demo-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .demo-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.55rem 0.85rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .demo-chip:hover {
+            background: rgba(139, 92, 246, 0.12);
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateX(4px);
+        }
+
+        .chip-name {
+            font-weight: 600;
+        }
+
+        .chip-points {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            font-weight: 700;
+        }
+
+        .bottom-links {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .link-secondary {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .link-secondary:hover {
+            color: #c4b5fd;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">GUDLFT</div>
-        <p class="subtitle">Portail d'inscription aux compétitions</p>
-        <form action="showSummary" method="post">
-            <label for="email">Email secrétaire</label>
-            <input type="email" name="email" id="email" placeholder="votre@email.com"/>
-            <button type="submit">Accéder →</button>
+    <div class="auth-card">
+        <div class="brand-header">
+            <div class="brand-logo">⚡</div>
+            <div class="brand-titles">
+                <h1>GUDLFT</h1>
+                <p>Système de gestion des compétitions</p>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="flash-box">
+                    <span>⚠️</span>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/showSummary" method="post" id="loginForm">
+            <div class="form-group">
+                <label for="email">Adresse email du club</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" name="email" id="email" placeholder="ex: john@simplylift.co" required autofocus />
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <span>Accéder au Tableau de Bord</span>
+                <span>→</span>
+            </button>
         </form>
+
+        <div class="demo-section">
+            <div class="demo-title">
+                <span>Comptes de démo (clic rapide)</span>
+                <span style="font-size:0.7rem; color:var(--accent-purple);">1-clic</span>
+            </div>
+            <div class="demo-chips">
+                <div class="demo-chip" onclick="fillEmail('john@simplylift.co')">
+                    <span class="chip-name">Simply Lift</span>
+                    <span class="chip-points">15 pts</span>
+                </div>
+                <div class="demo-chip" onclick="fillEmail('admin@irontemple.com')">
+                    <span class="chip-name">Iron Temple</span>
+                    <span class="chip-points">8 pts</span>
+                </div>
+                <div class="demo-chip" onclick="fillEmail('kate@shelifts.co.uk')">
+                    <span class="chip-name">She Lifts</span>
+                    <span class="chip-points">12 pts</span>
+                </div>
+                <div class="demo-chip" onclick="fillEmail('contact@titanbarbell.com')">
+                    <span class="chip-name">Titan Barbell Club</span>
+                    <span class="chip-points">20 pts</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-links">
+            <a href="/pointsDisplay" class="link-secondary">Consulter le classement public des clubs 🏆</a>
+        </div>
     </div>
+
+    <script>
+        function fillEmail(email) {
+            const input = document.getElementById('email');
+            input.value = email;
+            document.getElementById('loginForm').submit();
+        }
+    </script>
 </body>
-</html>
+</html>

@@ -2,13 +2,59 @@
     "competitions": [
         {
             "name": "Spring Festival",
-            "date": "2020-03-27 10:00:00",
-            "numberOfPlaces": "25"
+            "date": "2026-12-15 10:00:00",
+            "numberOfPlaces": 22,
+            "totalPlaces": 30,
+            "category": "Haltérophilie",
+            "location": "Paris Arena 🏋️"
         },
         {
             "name": "Fall Classic",
-            "date": "2020-10-22 13:30:00",
-            "numberOfPlaces": "13"
+            "date": "2027-03-22 13:30:00",
+            "numberOfPlaces": 4,
+            "totalPlaces": 25,
+            "category": "Powerlifting",
+            "location": "Lyon Palais des Sports ⚡"
+        },
+        {
+            "name": "Winter Open Championship",
+            "date": "2026-11-20 09:00:00",
+            "numberOfPlaces": 28,
+            "totalPlaces": 35,
+            "category": "Force Athlétique",
+            "location": "Bordeaux Vélodrome 🏆"
+        },
+        {
+            "name": "CrossLifting Masters 2027",
+            "date": "2027-05-10 14:00:00",
+            "numberOfPlaces": 16,
+            "totalPlaces": 20,
+            "category": "Cross-Lifting",
+            "location": "Marseille Le Dôme 💥"
+        },
+        {
+            "name": "Grand Prix National Strongman",
+            "date": "2027-08-01 10:00:00",
+            "numberOfPlaces": 38,
+            "totalPlaces": 50,
+            "category": "Strongman",
+            "location": "Lille Grand Palais 🛡️"
+        },
+        {
+            "name": "Summer National Cup (Passée)",
+            "date": "2024-07-14 09:00:00",
+            "numberOfPlaces": 0,
+            "totalPlaces": 30,
+            "category": "Strongman",
+            "location": "Nice Acropolis 🏛️"
+        },
+        {
+            "name": "Autumn Barbell Showdown (Passée)",
+            "date": "2025-09-18 11:00:00",
+            "numberOfPlaces": 0,
+            "totalPlaces": 25,
+            "category": "Haltérophilie",
+            "location": "Strasbourg Zenith 🏟️"
         }
     ]
 }

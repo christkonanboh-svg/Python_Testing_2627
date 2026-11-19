@@ -70,12 +70,45 @@ Merci !
 
 5. Testing
 
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
+    The project uses **pytest** and **pytest-cov** with tests structured into unit and integration test directories:
+    - `tests/unit/`: unit tests for internal logic, sorting, dates, JSON persistence
+    - `tests/integration/`: integration tests for all Flask routes, HTTP methods, flash messages, status codes
 
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
-   
- 6. Flake8 Report 
-    
+    To run all tests:
+    ```bash
+    pytest tests/ -v
+    ```
 
+    To run tests with terminal coverage:
+    ```bash
+    pytest tests/ -v --cov=server --cov-report=term-missing
+    ```
 
+    To generate the HTML coverage report:
+    ```bash
+    pytest tests/ --cov=server --cov-report=html:reports/coverage_html
+    ```
+
+6. Flake8 Report
+
+    The code follows PEP 8 standards with strict line length (< 79 characters) and formatting:
+    ```bash
+    flake8 server.py tests/ locustfile.py
+    ```
+
+7. Performance Testing (Locust)
+
+    According to the functional specifications, performance tests are executed with 6 users:
+    - Competition listing response time < 5 seconds
+    - Points update (booking) response time < 2 seconds
+
+    To run headless performance tests:
+    ```bash
+    locust -f locustfile.py --headless -u 6 -r 2 --run-time 60s --host http://localhost:5000 --html reports/locust_report.html
+    ```
+
+    To run with web interface:
+    ```bash
+    locust -f locustfile.py --host http://localhost:5000
+    ```
+    Then open `http://localhost:8089` in your browser.
